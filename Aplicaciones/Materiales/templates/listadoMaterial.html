@@ -1,0 +1,75 @@
+{% extends "./plantilla.html"%}
+{% block contenido %}
+<br>
+<br>
+<h3 class="text-center mb-4">LISTADO DE MATERIALES</h3>
+<div class="card  shadow">
+    
+    <div class="card-body">
+        
+        <table class="table table-bordered table-striped table-hover" id="tbl_materiales">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>NOMBRE MATERIAL</th>
+                    <th>TIPO MATERIAL</th>
+                    <th>UNIDAD MEDIDA</th>
+                    <th>IMAGEN</th>
+                    <th>PRECIO UNIDAD</th>
+                    <th>DESCRIPCION</th>
+                    <th>STOCK</th>
+                    <th>ACCIONES</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for mat in material %}
+                <tr>
+                    <td>{{ mat.id_mat }}</td>
+                    <td>{{ mat.nom_mat }}</td>
+                    <td>{{ mat.tipo_mat }}</td>
+                    <td>{{ mat.unidad_medida }}</td>
+                    <td>
+                        {% if mat.foto_mat and mat.foto_mat.url %}
+                            <a  href="{{mat.foto_mat.url}}" target="_blank">
+                                <img src="{{mat.foto_mat.url}}" alt=""
+                                height="100px" width="100px">
+                            </a><br>
+                            <a download  href="{{mat.foto_mat.url}}" class="btn btn-success btn-sm me-2">
+                                Descargar
+                            </a>
+                        {% else %}
+                            <p>No hay foto disponible.</p>
+                        {% endif %}
+                    </td>
+                    <td>{{ mat.prec_unidad }}</td>
+                    <td>{{ mat.descripcion }}</td>
+                    <td>{{ mat.stock }}</td>
+                    
+                    <td>
+                        <a href="/editarMaterial/{{ mat.id_mat }}" class="btn btn-warning btn-sm me-2">Editar</a> 
+                        <a onclick="return confirm('Esta seguro de eliminar permanentemente')" href="/eliminarMaterial/{{ mat.id_mat }}"
+                        class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <script>
+            let table = new DataTable('#tbl_materiales', {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json'
+                },
+                dom: 'Bfrtip',
+                buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
+                layout: {
+                    topStart: {
+                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'print']
+                    }
+                }
+            });
+        </script>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "./plantilla.html"%}
+{% block contenido %}
+<div class="container mt-4">
+    <form enctype="multipart/form-data" action="/procesarEdicionMaterial/" id="frm_editar_material" method="post" class="p-4 border rounded bg-light">
+        <h3 class="mb-3 text-center">ACTUALIZAR MATERIAL:</h3>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="" class="form-label"><b>ID:</b></label>
+            <input type="hidden" name="id_mat" value="{{ material.id_mat }}" >
+            <input type="text" class="form-control" id="id_mat" value="{{ material.id_mat }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_nombre_mat" class="form-label"><b>NOMBRE DEL MATERIAL:</b></label>
+            <input type="text" name="txt_nombre_mat" id="txt_nombre_mat" class="form-control" required value ="{{ material.nom_mat }}">
+        </div>
+        
+        <div class="mb-3">
+            <label for="txt_tipo_mat" class="form-label"><b>TIPO DE MATERIAL:</b></label>
+            <input type="text" name="txt_tipo_mat" id="txt_tipo_mat" class="form-control" required value ="{{ material.tipo_mat }}">
+        </div>
+        
+        <div class="mb-3">
+            <label for="txt_uni_med" class="form-label"><b>UNIDAD DE MEDIDA:</b></label>
+            <input type="text" name="txt_uni_med" id="txt_uni_med" class="form-control" required value ="{{ material.unidad_medida }}">
+        </div>
+        
+        <div>
+            <label for="foto_mat" class="form-label"><b>IMAGEN</b></label>
+            {% if material.foto_mat %}
+                <p>Foto actual:</p>
+                <img src="{{ material.foto_mat.url }}" alt="Foto del material" class="img-thumbnail" width="150">
+            {% endif %}
+            <input type="file" name="foto_mat" id="foto_mat" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_prec_uni" class="form-label"><b>PRECIO * UNIDAD:</b></label>
+            <input type="number" step="0.01" name="txt_prec_uni" id="txt_prec_uni" class="form-control" required value ="{{ material.prec_unidad|default:'0.00'  }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_descrip" class="form-label"><b>DESCRIPCION:</b></label>
+            <textarea name="txt_descrip" id="txt_descrip" class="form-control" rows="3" required >"{{ material.descripcion }}"</textarea>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-success me-2">Guardar</button>
+            <a href="/listadoMaterial/" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        
+        $("#frm_editar_material").validate({
+            rules: {
+                txt_nombre_mat: {
+                    required: true,
+                    lettersonly: true
+                },
+                txt_tipo_mat: {
+                    required: true,
+                    lettersonly: true
+                },
+                txt_uni_med: {
+                    required: true,
+                },
+                foto_mat: {
+                    imageExtension: true
+                },
+                txt_prec_uni: {
+                    required: true,
+                    number: true,
+                    min: 0.01
+                },
+                txt_descrip: {
+                    required: true,
+                    lettersonly: true
+                }
+            },
+            messages: {
+                txt_nombre_mat: {
+                    required: "Ingrese el nombre del material",
+                    lettersonly: "Solo se permiten letras."
+                },
+                txt_tipo_mat: {
+                    required: "Ingrese el tipo de material",
+                    lettersonly: "Solo se permiten letras."
+                },
+                txt_uni_med: {
+                    required: "Ingrese la unidad de medida",
+                },
+                foto_mat: {
+                    imageExtension: "Solo se permiten imágenes JPG, PNG o GIF."
+                },
+                txt_prec_uni: {
+                    required: "Ingrese el precio por unidad",
+                    number: "Debe ser un número válido",
+                    min: "El precio debe ser mayor a 0"
+                },
+                txt_descrip: {
+                    required: "Ingrese una descripción",
+                    lettersonly: "Solo se permiten letras."
+                }
+            },
+        });
+    });
+</script>
+
+{% endblock %}

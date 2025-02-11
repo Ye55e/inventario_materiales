@@ -1,0 +1,94 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <!-- Formulario alineado a la izquierda -->
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card shadow rounded-3 p-4">
+                <div class="card-body">
+                    <h3 class="text-center mb-4">REGISTRO DE SUMINISTRADOR</h3>
+                    <form action="/guardarSuministrador/" id="frm_nuevo_suministrador" method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="txt_nom_sumi" class="form-label"><b>NOMBRE DEL SUMINISTRADOR:</b></label>
+                            <input type="text" name="txt_nom_sumi" id="txt_nom_sumi" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="txt_direcc_sumi" class="form-label"><b>DIRECCIÓN:</b></label>
+                            <input type="text" name="txt_direcc_sumi" id="txt_direcc_sumi" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_telf_sumi" class="form-label"><b>TELÉFONO:</b></label>
+                            <input type="number" name="txt_telf_sumi" id="txt_telf_sumi" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_email_sumi" class="form-label"><b>CORREO ELECTRÓNICO:</b></label>
+                            <input type="email" name="txt_email_sumi" id="txt_email_sumi" class="form-control" required>
+                        </div>
+
+                        <br>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="/listadoSuministrador/" class="btn btn-danger">Cancelar</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#frm_nuevo_suministrador").validate({
+            rules: {
+                txt_nom_sumi: {
+                    required: true,
+                    lettersonly: true
+                },
+                txt_direcc_sumi: {
+                    required: true,
+                    minlength: 5
+                },
+                txt_telf_sumi: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 10,
+                    telefonoEcuador: true
+                },
+                txt_email_sumi: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                txt_nom_sumi: {
+                    required: "Por favor, ingrese el nombre del suministrador.",
+                    lettersonly: "Solo se permiten letras."
+                },
+                txt_direcc_sumi: {
+                    required: "Por favor, ingrese la dirección.",
+                    minlength: "Debe tener al menos 5 caracteres."
+                },
+                txt_telf_sumi: {
+                    required: "Por favor, ingrese un número de teléfono.",
+                    digits: "Solo se permiten números.",
+                    minlength: "Debe tener al menos 10 dígitos.",
+                    maxlength: "No debe exceder los 10 dígitos."
+                },
+                txt_email_sumi: {
+                    required: "Por favor, ingrese un correo electrónico.",
+                    email: "Ingrese un correo válido (ejemplo@dominio.com)."
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

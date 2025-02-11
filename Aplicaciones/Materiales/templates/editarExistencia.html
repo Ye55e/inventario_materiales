@@ -1,0 +1,97 @@
+{% extends "./plantilla.html" %}
+{% block contenido %}
+<div class="container mt-4">
+    <form enctype="multipart/form-data" action="/procesarEdicionExistencia/" id="frm_editar_existencia" method="post" class="p-4 border rounded bg-light">
+        <h3 class="mb-3 text-center">ACTUALIZAR EXISTENCIA:</h3>
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="id_exis" class="form-label"><b>ID:</b></label>
+            <input type="hidden" name="id_exis" value="{{ existencia.id_exis }}" >
+            <input type="text" class="form-control" id="id_exis" value="{{ existencia.id_exis }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="cant_disp" class="form-label"><b>CANTIDAD DISPONIBLE:</b></label>
+            <input type="number" name="cant_disp" id="cant_disp" class="form-control" required value="{{ existencia.cant_disp }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="tipo_mov" class="form-label"><b>TIPO DE MOVIMIENTO:</b></label>
+            <select name="tipo_mov" id="tipo_mov" class="form-control" required>
+                <option value="Entrada" {% if existencia.tipo_mov == 'Entrada' %}selected{% endif %}>Entrada</option>
+                <option value="Salida" {% if existencia.tipo_mov == 'Salida' %}selected{% endif %}>Salida</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="fech_exis" class="form-label"><b>FECHA:</b></label>
+            <input type="date" name="fech_exis" id="fech_exis" class="form-control" required value="{{ existencia.fech_exis|date:'Y-m-d' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="material" class="form-label"><b>MATERIAL:</b></label>
+            <select name="material" id="material" class="form-control" required>
+                {% for mat in material %}
+                    <option value="{{ mat.id_mat }}" {% if existencia.material.id_mat == mat.id_mat %}selected{% endif %}>{{ mat.nom_mat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="orden" class="form-label"><b>ORDEN (Opcional):</b></label>
+            <select name="orden" id="orden" class="form-control">
+                <option value="">Sin orden</option>
+                {% for ord in ordenes %}
+                    <option value="{{ ord.id_ord }}" {% if existencia.orden and existencia.orden.id_ord == ord.id_ord %}selected{% endif %}>Orden #{{ ord.id_ord }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-success me-2">Guardar</button>
+            <a href="/listadoExistencia/" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#frm_editar_existencia").validate({
+            rules: {
+                cant_disp: {
+                    required: true,
+                    number: true,
+                    min: 1
+                },
+                tipo_mov: {
+                    required: true
+                },
+                fech_exis: {
+                    required: true,
+                    sameDateAsToday: true
+                },
+                id_mat: {
+                    required: true
+                },
+            },
+            messages: {
+                cant_disp: {
+                    required: "Ingrese la cantidad",
+                    number: "Debe ser un número válido",
+                    min: "La cantidad debe ser mayor a 0"
+                },
+                tipo_mov: {
+                    required: "Seleccione un tipo de movimiento"
+                },
+                fech_exis: {
+                    required: "Seleccione una fecha",
+                    sameDateAsToday: "La fecha debe ser igual a la fecha actual"
+                },
+                id_mat: {
+                    required: "Seleccione un material"
+                }
+            },
+        });
+    });
+</script>
+{% endblock %}

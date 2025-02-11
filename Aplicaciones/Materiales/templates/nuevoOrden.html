@@ -1,0 +1,98 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <!-- Formulario alineado a la izquierda -->
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card shadow rounded-3 p-4">
+                <div class="card-body">
+                    <h3 class="text-center mb-4">REGISTRO DE ORDEN</h3>
+                    <form action="/guardarOrden/" id="frm_nueva_orden" method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="txt_fecha_ord" class="form-label"><b>FECHA DE ORDEN:</b></label>
+                            <input type="date" name="txt_fecha_ord" id="txt_fecha_ord" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_estado" class="form-label"><b>ESTADO:</b></label>
+                            <select name="txt_estado" id="txt_estado" class="form-control" required>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Aprobada">Aprobada</option>
+                                <option value="Recibida">Recibida</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_total" class="form-label"><b>TOTAL:</b></label>
+                            <input type="number" step="0.01" name="txt_total" id="txt_total" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_sumi" class="form-label"><b>SUMINISTRADOR:</b></label>
+                            <select name="id_sumi" id="id_sumi" class="form-control" required>
+                                <option value="" disabled selected>Seleccione un suministrador</option>
+                                {% for sumi in suministrador %}
+                                    <option value="{{ sumi.id_sumi }}">{{ sumi.nom_sumi }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <br>
+                        <br>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="/listadoOrden/" class="btn btn-danger">Cancelar</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+    $("#frm_nueva_orden").validate({
+        rules: {
+            txt_fecha_ord: {
+                required: true,
+                date: true,
+                sameDateAsToday: true
+            },
+            txt_estado: {
+                required: true
+            },
+            txt_total: {
+                required: true,
+                number: true,
+                min: 0.01
+            },
+            id_sumi: {
+                required: true
+            }
+        },
+        messages: {
+            txt_fecha_ord: {
+                required: "Por favor, seleccione una fecha",
+                date: "Ingrese una fecha válida",
+                sameDateAsToday: "La fecha debe ser igual a la fecha actual"
+            },
+            txt_estado: {
+                required: "Seleccione un estado"
+            },
+            txt_total: {
+                required: "Ingrese el total de la orden",
+                number: "Debe ser un número válido",
+                min: "El total debe ser mayor a 0"
+            },
+            id_sumi: {
+                required: "Seleccione un suministrador"
+            }
+        },
+    });
+});
+</script>
+{% endblock %}

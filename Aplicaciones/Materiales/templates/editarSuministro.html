@@ -1,0 +1,87 @@
+{% extends "./plantilla.html"%}
+{% block contenido %}
+<div class="container mt-4">
+    <form action="/procesarEdicionSuministrador/" id="frm_editar_suministrador" method="post" class="p-4 border rounded bg-light">
+        <h3 class="mb-3 text-center">ACTUALIZAR SUMINISTRADOR:</h3>
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_sumi" class="form-label"><b>ID:</b></label>
+            <input type="hidden" name="id_sumi" value="{{ suministrador.id_sumi }}" >
+            <input type="text" class="form-control" id="id_sumi" value="{{ suministrador.id_sumi }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_nom_sumi" class="form-label"><b>NOMBRE:</b></label>
+            <input type="text" name="txt_nom_sumi" id="txt_nom_sumi" class="form-control" required value="{{ suministrador.nom_sumi }}">
+        </div>
+        
+        <div class="mb-3">
+            <label for="txt_direcc_sumi" class="form-label"><b>DIRECCIÓN:</b></label>
+            <input type="text" name="txt_direcc_sumi" id="txt_direcc_sumi" class="form-control" required value="{{ suministrador.direcc_sumi }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_telf_sumi" class="form-label"><b>TELÉFONO:</b></label>
+            <input type="text" name="txt_telf_sumi" id="txt_telf_sumi" class="form-control" required value="{{ suministrador.telf_sumi }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_email_sumi" class="form-label"><b>CORREO:</b></label>
+            <input type="email" name="txt_email_sumi" id="txt_email_sumi" class="form-control" required value="{{ suministrador.email }}">
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-success me-2">Guardar</button>
+            <a href="/listadoSuministrador/" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#frm_editar_suministrador").validate({
+            rules: {
+                txt_nom_sumi: {
+                    required: true,
+                    lettersonly: true
+                },
+                txt_direcc_sumi: {
+                    required: true,
+                    minlength: 5
+                },
+                txt_telf_sumi: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 10,
+                    telefonoEcuador: true
+                },
+                txt_email_sumi: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                txt_nom_sumi: {
+                    required: "Por favor, ingrese el nombre del suministrador.",
+                    lettersonly: "Solo se permiten letras."
+                },
+                txt_direcc_sumi: {
+                    required: "Por favor, ingrese la dirección.",
+                    minlength: "Debe tener al menos 5 caracteres."
+                },
+                txt_telf_sumi: {
+                    required: "Por favor, ingrese un número de teléfono.",
+                    digits: "Solo se permiten números.",
+                    minlength: "Debe tener al menos 10 dígitos.",
+                    maxlength: "No debe exceder los 10 dígitos."
+                },
+                txt_email_sumi: {
+                    required: "Por favor, ingrese un correo electrónico.",
+                    email: "Ingrese un correo válido (ejemplo@dominio.com)."
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

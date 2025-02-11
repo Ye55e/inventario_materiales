@@ -1,0 +1,94 @@
+{% extends "./plantilla.html"%}
+
+{% block contenido %}
+<div class="container mt-4">
+    <form action="/procesarEdicionOrden/" id="frm_editar_orden" method="post" class="p-4 border rounded bg-light">
+        <h3 class="mb-3 text-center">ACTUALIZAR ORDEN:</h3>
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="" class="form-label"><b>ID:</b></label>
+            <input type="hidden" name="id_ord" value="{{ orden.id_ord }}" >
+            <input type="text" class="form-control" id="id_ord" value="{{ orden.id_ord }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_fecha_ord" class="form-label"><b>FECHA:</b></label>
+            <input type="date" name="txt_fecha_ord" id="txt_fecha_ord" class="form-control" required value ="{{ orden.fecha_ord|date:'Y-m-d' }}">
+        </div>
+        
+        <div class="mb-3">
+            <label for="txt_estado" class="form-label"><b>ESTADO:</b></label>
+            <select name="txt_estado" id="txt_estado" class="form-control" required>
+                <option value="Pendiente" {% if orden.estado == 'Pendiente' %} selected {% endif %}>Pendiente</option>
+                <option value="Aprobada" {% if orden.estado == 'Aprobada' %} selected {% endif %}>Aprobada</option>
+                <option value="Recibida" {% if orden.estado == 'Recibida' %} selected {% endif %}>Recibida</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="txt_total" class="form-label"><b>TOTAL:</b></label>
+            <input type="number" name="txt_total" id="txt_total" class="form-control" required value ="{{ orden.total|default:0 }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_sumi" class="form-label"><b>SUMINISTRO:</b></label>
+            <select name="id_sumi" id="id_sumi" class="form-select" required>
+                {% for sumi in suministrador %}
+                <option value="{{ sumi.id_sumi }}" {% if sumi.id_sumi == orden.id_sumi %}selected{% endif %}>
+                    {{ sumi.nom_sumi }}
+                </option>
+                
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success me-2">Guardar</button>
+            <a href="/listadoOrden/" class="btn btn-danger">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+    $("#frm_editar_orden").validate({
+        rules: {
+            txt_fecha_ord: {
+                required: true,
+                date: true,
+                sameDateAsToday: true
+            },
+            txt_estado: {
+                required: true
+            },
+            txt_total: {
+                required: true,
+                number: true,
+                min: 0.01
+            },
+            id_sumi: {
+                required: true
+            }
+        },
+        messages: {
+            txt_fecha_ord: {
+                required: "Por favor, seleccione una fecha",
+                date: "Ingrese una fecha válida",
+                sameDateAsToday: "La fecha debe ser igual a la fecha actual"
+            },
+            txt_estado: {
+                required: "Seleccione un estado"
+            },
+            txt_total: {
+                required: "Ingrese el total de la orden",
+                number: "Debe ser un número válido",
+                min: "El total debe ser mayor a 0"
+            },
+            id_sumi: {
+                required: "Seleccione un suministrador"
+            }
+        },
+    });
+});
+</script>
+{% endblock %}

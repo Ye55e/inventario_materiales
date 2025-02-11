@@ -1,0 +1,132 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <!-- Formulario alineado a la izquierda -->
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card shadow rounded-3 p-4">
+                <div class="card-body">
+                    <h3 class="text-center mb-4">REGISTRO DE MATERIAL</h3>
+                    <form enctype="multipart/form-data" action="/guardarMaterial/" id="frm_nuevo_material" method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="txt_nombre_mat" class="form-label"><b>NOMBRE DEL MATERIAL:</b></label>
+                            <input type="text" name="txt_nombre_mat" id="txt_nombre_mat" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="txt_tipo_mat" class="form-label"><b>TIPO DE MATERIAL:</b></label>
+                            <input type="text" name="txt_tipo_mat" id="txt_tipo_mat" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="txt_uni_med" class="form-label"><b>UNIDAD DE MEDIDA:</b></label>
+                            <input type="text" name="txt_uni_med" id="txt_uni_med" class="form-control" required>
+                        </div>
+                        
+                        <div>
+                            <label><b>IMAGEN</b></label>
+                            <input type="file" name="foto_mat" id="foto_mat" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_prec_uni" class="form-label"><b>PRECIO * UNIDAD:</b></label>
+                            <input type="number" name="txt_prec_uni" id="txt_prec_uni" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_descrip" class="form-label"><b>DESCRIPCION:</b></label>
+                            <textarea name="txt_descrip" id="txt_descrip" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_stock" class="form-label"><b>STOCK:</b></label>
+                            <input type="text" name="txt_stock" id="txt_stock" class="form-control" readonly>
+                        </div>
+
+                        <br>
+                        <br>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="/listadoMaterial/" class="btn btn-danger">Cancelar</a>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#foto_mat").fileinput({
+        allowedFileExtensions: ["png", "jpg", "jpeg"],
+        showCaption: false,
+        dropZoneEnabled: true,
+        language: "es",
+        browseLabel: "Buscar archivo",
+        dropZoneTitle: "Arrastre los archivos aquí",
+        msgSelected: "{n} archivos seleccionados",
+        msgInvalidFileExtension: "El archivo '{name}' tiene una extensión no válida. Solo se permiten archivos '{extensions}'",
+        msgFilesTooMany: "El número de archivos seleccionados para cargar ({n}) excede el límite máximo permitido",
+    
+    });
+    $(document).ready(function() {
+        
+        $("#frm_nuevo_material").validate({
+            rules: {
+                txt_nombre_mat: {
+                    required: true,
+                    lettersonly: true
+                },
+                txt_tipo_mat: {
+                    required: true,
+                    lettersonly: true
+                },
+                txt_uni_med: {
+                    required: true,
+                },
+                foto_mat: {
+                    imageExtension: true
+                },
+                txt_prec_uni: {
+                    required: true,
+                    number: true,
+                    min: 0.01
+                },
+                txt_descrip: {
+                    required: true,
+                    lettersonly: true
+                }
+            },
+            messages: {
+                txt_nombre_mat: {
+                    required: "Ingrese el nombre del material",
+                    lettersonly: "Solo se permiten letras."
+                },
+                txt_tipo_mat: {
+                    required: "Ingrese el tipo de material",
+                    lettersonly: "Solo se permiten letras."
+                },
+                txt_uni_med: {
+                    required: "Ingrese la unidad de medida",
+                },
+                foto_mat: {
+                    imageExtension: "Solo se permiten imágenes JPG, PNG o GIF."
+                },
+                txt_prec_uni: {
+                    required: "Ingrese el precio por unidad",
+                    number: "Debe ser un número válido",
+                    min: "El precio debe ser mayor a 0"
+                },
+                txt_descrip: {
+                    required: "Ingrese una descripción",
+                    lettersonly: "Solo se permiten letras."
+                }
+            },
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<br>
+<br>
+<h3 class="text-center mb-4">LISTADO DE ÓRDENES</h3>
+<div class="card shadow">
+    
+    <div class="card-body">
+        
+        <table class="table table-bordered table-striped table-hover" id="tbl_ordenes">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>FECHA</th>
+                    <th>ESTADO</th>
+                    <th>TOTAL</th>
+                    <th>PROVEEDOR</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ord in orden %}
+                <tr>
+                    <td>{{ ord.id_ord }}</td>
+                    <td>{{ ord.fecha_ord }}</td>
+                    <td>{{ ord.estado }}</td>
+                    <td>{{ ord.total }}</td>
+                    <td>{{ ord.suministrador.nom_sumi }}</td>
+                    
+                    <td>
+                        <a href="/editarOrden/{{ ord.id_ord }}" class="btn btn-warning btn-sm me-2">Editar</a> 
+                        <a onclick="return confirm('¿Está seguro de eliminar esta orden permanentemente?')" href="/eliminarOrden/{{ ord.id_ord }}"
+                        class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <script>
+            let table = new DataTable('#tbl_ordenes', {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json'
+                },
+                dom: 'Bfrtip',
+                buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
+                layout: {
+                    topStart: {
+                        buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', 'print']
+                    }
+                }
+            });
+        </script>
+    </div>
+</div>
+
+{% endblock %}

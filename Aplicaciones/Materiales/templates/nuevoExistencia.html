@@ -1,0 +1,104 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <!-- Formulario alineado a la izquierda -->
+        <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="card shadow rounded-3 p-4">
+                <div class="card-body">
+                    <h3 class="text-center mb-4">REGISTRO DE EXISTENCIAS</h3>
+                    <form action="/guardarExistencia/" id="frm_nueva_existencia" method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="txt_cantidad" class="form-label"><b>CANTIDAD:</b></label>
+                            <input type="number" name="txt_cantidad" id="txt_cantidad" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_tipo_mov" class="form-label"><b>TIPO DE MOVIMIENTO:</b></label>
+                            <select name="txt_tipo_mov" id="txt_tipo_mov" class="form-control" required>
+                                <option value="Entrada">Entrada</option>
+                                <option value="Salida">Salida</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="txt_fecha" class="form-label"><b>FECHA:</b></label>
+                            <input type="date" name="txt_fecha" id="txt_fecha" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_mat" class="form-label"><b>MATERIAL:</b></label>
+                            <select name="id_mat" id="id_mat" class="form-control" required>
+                                <option value="" disabled selected>Seleccione un Material</option>
+                                {% for mat in material %}
+                                    <option value="{{ mat.id_mat }}">{{ mat.nom_mat }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                         
+
+                        <div class="mb-3">
+                            <label for="id_orden" class="form-label"><b>ORDEN:</b></label>
+                            <select name="id_orden" id="id_orden" class="form-select">
+                                <option value="">(Opcional)</option>
+                                {% for ord in orden %}
+                                <option value="{{ ord.id_ord }}">Orden #{{ ord.id_ord }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <br>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <a href="/listadoExistencia/" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#frm_nueva_existencia").validate({
+            rules: {
+                txt_cantidad: {
+                    required: true,
+                    number: true,
+                    min: 1
+                },
+                txt_tipo_mov: {
+                    required: true
+                },
+                txt_fecha: {
+                    required: true,
+                    sameDateAsToday: true
+                },
+                id_mat: {
+                    required: true
+                },
+            },
+            messages: {
+                txt_cantidad: {
+                    required: "Ingrese la cantidad",
+                    number: "Debe ser un número válido",
+                    min: "La cantidad debe ser mayor a 0"
+                },
+                txt_tipo_mov: {
+                    required: "Seleccione un tipo de movimiento"
+                },
+                txt_fecha: {
+                    required: "Seleccione una fecha",
+                    sameDateAsToday: "La fecha debe ser igual a la fecha actual"
+                },
+                id_mat: {
+                    required: "Seleccione un material"
+                }
+            },
+        });
+    });
+</script>
+{% endblock %}
