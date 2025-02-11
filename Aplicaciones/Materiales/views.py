@@ -235,11 +235,11 @@ def procesarEdicionExistencia(request):
         old_tipo_mov = existencia.tipo_mov
         old_material = existencia.material
 
-        nueva_cant_disp = int(request.POST['txt_cant_disp'])
-        nuevo_tipo_mov = request.POST['txt_tipo_mov']
-        nueva_fech_exis = request.POST['txt_fech_exis']
-        nuevo_material = get_object_or_404(Materiales, pk=request.POST['txt_material'])
-        nueva_orden = get_object_or_404(Ordenes, pk=request.POST['txt_orden']) if request.POST.get('txt_orden') else None
+        nueva_cant_disp = int(request.POST['cant_disp'])
+        nuevo_tipo_mov = request.POST['tipo_mov']
+        nueva_fech_exis = request.POST['fech_exis']
+        nuevo_material = get_object_or_404(Materiales, pk=request.POST['material'])
+        nueva_orden = get_object_or_404(Ordenes, pk=request.POST['orden']) if request.POST.get('orden') else None
 
         if old_material != nuevo_material:
             if old_tipo_mov == 'Entrada':

@@ -42,7 +42,7 @@
             <label for="orden" class="form-label"><b>ORDEN (Opcional):</b></label>
             <select name="orden" id="orden" class="form-control">
                 <option value="">Sin orden</option>
-                {% for ord in ordenes %}
+                {% for ord in orden %}
                     <option value="{{ ord.id_ord }}" {% if existencia.orden and existencia.orden.id_ord == ord.id_ord %}selected{% endif %}>Orden #{{ ord.id_ord }}</option>
                 {% endfor %}
             </select>
@@ -94,4 +94,5 @@
         });
     });
 </script>
+
 {% endblock %}
